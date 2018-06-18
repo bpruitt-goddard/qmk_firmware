@@ -19,7 +19,7 @@ install:
 before_script:
   - avr-gcc --version
 script:
-- make test:all AUTOGEN=false
+- make ergodox_ez:bpruitt-goddard
 - bash util/travis_build.sh
 - bash util/travis_docs.sh
 addons:
@@ -33,12 +33,9 @@ addons:
     - diffutils
     - dos2unix
     - doxygen
-after_success: 
+  artifacts:
+    s3_region: "us-west-2"
+    paths:
+      - ergodox_ez_bpruitt-goddard.hex
+after_success:
   bash util/travis_compiled_push.sh
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/afce403d65f143dfac09
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: never     # options: [always|never|change] default: always
