@@ -52,8 +52,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     GUI_T(KC_BSLASH), KC_SCOLON,  KC_COMMA, KC_DOT,  KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,    KC_L,        KC_SLASH,
     SLASH_NUM,        KC_A,       KC_O,     KC_E,    KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,    KC_S,        KC_MINUS,
     KC_LSPO,          KC_LCTL,    KC_Q,     KC_J,    KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      KC_V,    CTL_T(KC_Z), KC_RSPC,
-    KC_AT,            KC_HASH,    KC_GRAVE, KC_LEFT, KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME, KC_END,      TO(QWERTY),
-                                         ALT_T(KC_APPLICATION), ALL_T(KC_NO),           KC_PGUP, KC_LGUI,
+    KC_AT,            KC_HASH,    KC_GRAVE, KC_LEFT, KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME, KC_END,      MEH_T(KC_NO),
+                                         ALT_T(KC_APPLICATION), ALL_T(KC_NO),           TO(QWERTY), KC_LGUI,
                                                                    KC_BSLASH,           TO(MAC),
                                           KC_ENTER, KC_TAB, CTL_T(KC_ESCAPE),           CTL_T(KC_ESCAPE), KC_BSPACE,  KC_SPACE),
 
@@ -75,8 +75,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_DELETE,  KC_Q,     KC_W,         KC_E,     KC_R,     KC_T,    KC_Y,              TO(BASE),     KC_Y,   KC_U,   KC_I,     KC_O,         KC_P,         KC_BSLASH,
     MO(NUM),    KC_A,     KC_S,         KC_D,     KC_F,     KC_G,                                     KC_H,   KC_J,   KC_K,     KC_L,         KC_SCLN,      GUI_T(KC_QUOT),
     KC_LSFT,    KC_Z,     KC_X,         KC_C,     KC_V,     KC_B, ALT_T(KC_NO),         MEH_T(KC_NO), KC_N,   KC_M,   KC_COMMA, KC_DOT,       KC_SLASH,     KC_RSPC,
-    KC_GRAVE,   KC_QUOTE, LALT(KC_TAB), KC_LEFT,  KC_RIGHT,                                                   KC_UP,  KC_DOWN,  KC_LBRACKET,  KC_RBRACKET,  TO(BASE),
-                                                  ___, KC_LGUI,                         ___, KC_ESCAPE,
+    KC_GRAVE,   KC_QUOTE, LALT(KC_TAB), KC_LEFT,  KC_RIGHT,                                                   KC_UP,  KC_DOWN,  KC_LBRACKET,  KC_RBRACKET,  ___,
+                                                  ___, KC_LGUI,                         TO(BASE), KC_ESCAPE,
                                                        KC_HOME,                         KC_PGUP,
                                       KC_ENTER, KC_TAB, KC_END,                         KC_PGDOWN, KC_BSPACE, KC_SPACE),
 
