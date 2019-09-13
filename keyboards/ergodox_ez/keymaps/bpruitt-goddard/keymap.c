@@ -32,7 +32,7 @@ enum custom_keycodes {
 // Some combined keys (one normal keycode when tapped and one modifier or layer
 // toggle when held).
 #define SPC_RALT  MT(MOD_RALT, KC_SPC)  // SPACE key and right alt modifier.
-#define SLASH_NUM LT(NUM, KC_QUOTE) // Backslash key and momentary num layer
+#define SLASH_NUM LT(NUM, KC_BSLASH) // Backslash key and momentary num layer
 
 // The most portable copy/paste keys (windows (mostly), linux, and some terminal emulators).
 #define MK_CUT    LSFT(KC_DEL)  // shift + delete
@@ -49,8 +49,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Layer 0: basic keys.
   [BASE] = LAYOUT_ergodox_pretty(
     KC_DLR,           KC_AMPR,    KC_LBRC,  KC_LCBR, KC_RCBR, KC_LPRN, KC_CIRC,           KC_F4,        KC_EQUAL,KC_ASTR, KC_BSLASH, KC_PLUS, KC_RBRACKET, KC_EXLM,
-    GUI_T(KC_BSLASH), KC_SCOLON,  KC_COMMA, KC_DOT,  KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,    KC_L,        GUI_T(KC_SLASH),
-    SLASH_NUM,        KC_A,       KC_O,     KC_E,    KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,    KC_S,        KC_MINUS,
+    SLASH_NUM,        KC_SCOLON,  KC_COMMA, KC_DOT,  KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,    KC_L,        KC_SLASH,
+    GUI_T(KC_QUOTE), KC_A,       KC_O,     KC_E,    KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,    KC_S,         GUI_T(KC_MINUS),
     KC_LSPO,          KC_LCTL,    KC_Q,     KC_J,    KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      KC_V,    CTL_T(KC_Z), KC_RSPC,
     KC_AT,            KC_HASH,    KC_GRAVE, KC_LEFT, KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME, KC_END,      MEH_T(KC_NO),
                                          ALT_T(KC_APPLICATION), ALL_T(KC_NO),           TO(QWERTY), KC_LGUI,
