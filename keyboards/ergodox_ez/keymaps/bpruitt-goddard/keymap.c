@@ -61,10 +61,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   // Layer 1: function and numpad keys.
   [NUM] = LAYOUT_ergodox_pretty(
-    ___,  KC_F1,   KC_F2,    KC_F3,       KC_F4,       KC_F5,      ___,         ___, KC_F6,   KC_F7,  KC_F8,  KC_F9,      KC_F10,       KC_F11,
-    ___,  KC_EXLM, KC_COMMA, KC_DOT,      KC_MS_BTN1,  KC_MS_BTN2, ___,         ___, KC_UP,   KC_7,   KC_8,   KC_9,       KC_ASTR,      KC_F12,
-    XXX,  ___,     KC_LCBR,  KC_RCBR,     MC_ARROW,    KC_GRAVE,                     KC_DOWN, KC_4,   KC_5,   KC_6,       KC_PLUS,      KC_UNDS,
-    ___,  ___,     KC_CIRC,  KC_LBRACKET, KC_RBRACKET, KC_TILD,    ___,         ___, KC_0,    KC_1,   KC_2,   KC_3,       KC_KP_SLASH,  KC_BSLASH,
+    ___,  KC_F1,   KC_F2,    KC_F3,       KC_F4,          KC_F5,          ___,         ___, KC_F6,   KC_F7,  KC_F8,  KC_F9,      KC_F10,       KC_F11,
+    ___,  KC_EXLM, KC_COMMA, KC_DOT,      KC_MS_BTN1,     KC_MS_BTN2,     ___,         ___, KC_UP,   KC_7,   KC_8,   KC_9,       KC_ASTR,      KC_F12,
+    XXX,  ___,     KC_LCBR,  KC_RCBR,     MC_ARROW,       KC_GRAVE,                         KC_DOWN, KC_4,   KC_5,   KC_6,       KC_PLUS,      KC_UNDS,
+    ___,  ___,     KC_CIRC,  KC_LBRACKET, LALT(KC_LEFT),  LALT(KC_RIGHT), ___,         ___, KC_0,    KC_1,   KC_2,   KC_3,       ___,          ___,
     ___,  ___,     ___,      ___,         ___,                                                ___,    KC_0,   KC_KP_DOT,  KC_EQUAL,     ___,
                                                            ___,    ___,         KC_KP_ASTERISK, KC_KP_SLASH,
                                                                KC_LCTL,         ___,
