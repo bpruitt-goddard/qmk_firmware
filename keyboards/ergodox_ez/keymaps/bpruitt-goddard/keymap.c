@@ -11,8 +11,28 @@
 #define QWERTY 2
 #define MAC 3
 
+typedef struct {
+  bool is_press_action;
+  int state;
+} tap;
+
+enum {
+  SINGLE_TAP = 1,
+  SINGLE_HOLD = 2,
+  DOUBLE_TAP = 3,
+  DOUBLE_HOLD = 4,
+  TRIPLE_TAP = 6,
+  TRIPLE_HOLD = 7
+};
+
 // The Tap Dance identifiers, used in the TD keycode and tap_dance_actions array.
-#define TAP_MACRO 0
+enum {
+  TAP_MACRO = 0,
+  TAP_LSHIFT,
+  TAP_RSHIFT,
+};
+
+int cur_dance (qk_tap_dance_state_t *state);
 
 // SAFE_RANGE must be used to tag the first element of the enum.
 // DYNAMIC_MACRO_RANGE must always be the last element of the enum if other
@@ -49,11 +69,11 @@ enum custom_keycodes {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Layer 0: basic keys.
   [BASE] = LAYOUT_ergodox_pretty(
-    KC_DLR,           KC_AMPR,    KC_LBRC,    KC_LCBR,        KC_RCBR, KC_LPRN, KC_CIRC,           KC_F4,        KC_EQUAL,KC_ASTR, KC_BSLASH, KC_PLUS, KC_RBRACKET, KC_EXLM,
-    KC_BSLASH,        KC_SCOLON,  SCOMMA_NUM, LCTL_T(KC_DOT), KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,    KC_L,        KC_SLASH,
-    KC_QUOTE,         KC_A,       KC_O,       KC_E,           KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,    KC_S,        GUI_T(KC_MINUS),
-    KC_LSPO,          ___,        GUI_T(KC_Q),KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      KC_V,    CTL_T(KC_Z), KC_RSPC,
-    KC_AT,            KC_HASH,    KC_GRAVE,   KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME, KC_END,      MEH_T(KC_NO),
+    KC_DLR,           KC_AMPR,    KC_LBRC,    KC_LCBR,        KC_RCBR, KC_LPRN, KC_CIRC,           KC_F4,        KC_EQUAL,KC_ASTR, KC_BSLASH, KC_PLUS,        KC_RBRACKET, KC_EXLM,
+    KC_BSLASH,        KC_SCOLON,  SCOMMA_NUM, LCTL_T(KC_DOT), KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,           KC_L,        KC_SLASH,
+    KC_QUOTE,         KC_A,       KC_O,       KC_E,           KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,           KC_S,        GUI_T(KC_MINUS),
+    TD(TAP_LSHIFT),   KC_AT,      GUI_T(KC_Q),KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      LT(NUM, KC_V),  CTL_T(KC_Z), TD(TAP_RSHIFT),
+    ___,              KC_HASH,    KC_GRAVE,   KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME,        KC_END,      MEH_T(KC_NO),
                                                     ALT_T(KC_APPLICATION), ALL_T(KC_NO),           TO(QWERTY), KC_LGUI,
                                                                               KC_BSLASH,           TO(MAC),
                                                     KC_ENTER, KC_TAB, CTL_T(KC_ESCAPE),           CTL_T(KC_ESCAPE), KC_BSPACE,  KC_SPACE),
@@ -128,10 +148,79 @@ void macro_tapdance_fn(qk_tap_dance_state_t *state, void *user_data) {
   process_record_dynamic_macro(keycode, &record);
 }
 
+// Return an integer that corresponds to what kind of tap dance should be executed.
+int cur_dance (qk_tap_dance_state_t *state) {
+  if (state->count == 1) {
+    if (!state->pressed)  return SINGLE_TAP;
+    //key has not been interrupted, but they key is still held. Means you want to send a 'HOLD'.
+    else return SINGLE_HOLD;
+  }
+  else if (state->count == 2) {
+    if (state->pressed) return DOUBLE_HOLD;
+    else return DOUBLE_TAP;
+  }
+  //Assumes no one is trying to type the same letter three times (at least not quickly).
+  if (state->count == 3) {
+    if (!state->pressed)  return TRIPLE_TAP;
+    else return TRIPLE_HOLD;
+  }
+  else return 8; //magic number. At some point this method will expand to work for more presses
+}
+
+//instantiate an instance of 'tap' for the 'x' tap dance.
+static tap xtap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void lshift_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP: register_code16(KC_LPRN); break;
+    case SINGLE_HOLD: register_code(KC_LSHIFT); break;
+    case DOUBLE_TAP: register_code(KC_CAPS); break;
+    case DOUBLE_HOLD: register_code(KC_LSHIFT); break;
+  }
+}
+
+void lshift_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP: unregister_code16(KC_LPRN); break;
+    case SINGLE_HOLD: unregister_code(KC_LSHIFT); break;
+    // Don't unregister caps because then it disables caps lock
+    case DOUBLE_TAP: break;
+    case DOUBLE_HOLD: unregister_code(KC_LSHIFT);
+  }
+  xtap_state.state = 0;
+}
+
+void rshift_finished (qk_tap_dance_state_t *state, void *user_data) {
+  xtap_state.state = cur_dance(state);
+  switch (xtap_state.state) {
+    case SINGLE_TAP: register_code16(KC_RPRN); break;
+    case SINGLE_HOLD: register_code(KC_RSHIFT); break;
+    case DOUBLE_TAP: register_code(KC_CAPS); break;
+    case DOUBLE_HOLD: register_code(KC_RSHIFT); break;
+  }
+}
+
+void rshift_reset (qk_tap_dance_state_t *state, void *user_data) {
+  switch (xtap_state.state) {
+    case SINGLE_TAP: unregister_code16(KC_RPRN); break;
+    case SINGLE_HOLD: unregister_code(KC_RSHIFT); break;
+    // Don't unregister caps because then it disables caps lock
+    case DOUBLE_TAP: break;
+    case DOUBLE_HOLD: unregister_code(KC_RSHIFT);
+  }
+  xtap_state.state = 0;
+}
+
 // The definition of the tap dance actions:
 qk_tap_dance_action_t tap_dance_actions[] = {
   // This Tap dance plays the macro 1 on TAP and records it on double tap.
-  [TAP_MACRO] = ACTION_TAP_DANCE_FN(macro_tapdance_fn)
+  [TAP_MACRO] = ACTION_TAP_DANCE_FN(macro_tapdance_fn),
+  [TAP_LSHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, lshift_finished, lshift_reset),
+  [TAP_RSHIFT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, rshift_finished, rshift_reset)
 };
 
 // Runs for each key down or up event.
