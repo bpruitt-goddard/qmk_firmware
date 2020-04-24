@@ -9,7 +9,6 @@
 #define BASE 0
 #define NUM 1
 #define QWERTY 2
-#define MAC 3
 
 typedef struct {
   bool is_press_action;
@@ -75,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     TD(TAP_LSHIFT),   KC_AT,      GUI_T(KC_Q),KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      LT(NUM, KC_V),  CTL_T(KC_Z), TD(TAP_RSHIFT),
     ___,              KC_HASH,    KC_GRAVE,   KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME,        KC_END,      MEH_T(KC_NO),
                                                     ALT_T(KC_APPLICATION), ALL_T(KC_NO),           TO(QWERTY), KC_LGUI,
-                                                                              KC_BSLASH,           TO(MAC),
+                                                                              KC_BSLASH,           ___,
                                                     KC_ENTER, KC_TAB, CTL_T(KC_ESCAPE),           CTL_T(KC_ESCAPE), KC_BSPACE,  KC_SPACE),
 
   // Layer 1: function and numpad keys.
@@ -100,18 +99,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                   ___, KC_LGUI,                         TO(BASE), KC_ESCAPE,
                                                        KC_HOME,                         KC_PGUP,
                                       KC_ENTER, KC_TAB, KC_END,                         KC_PGDOWN, KC_BSPACE, KC_SPACE),
-
-    // Layer 3: Mac layer
-    [MAC] = LAYOUT_ergodox_pretty(
-      /* left hand */
-      ___,  KC_1,               KC_2, KC_3,   KC_4,   KC_5, ___,        ___, KC_6,  KC_7, KC_8, KC_9, KC_0,         ___,
-      ___,  ___,                ___,  ___,    ___,    ___,  ___,        ___, ___,   ___,  ___,  ___,  ___,          ___,
-      ___,  ___,                ___,  ___,    ___,    ___,                   ___,   ___,  ___,  ___,  ___,          ___,
-      ___,  GUI_T(KC_QUOTE),    ___,  ___,    ___,    ___,  ___,        ___, ___,   ___,  ___,  ___,  GUI_T(KC_Z),  ___,
-      ___,  ___,  ___,  MAC_L,  MAC_R,                                              ___,  ___,  ___,  ___,          ___,
-                                        ___,  ___,        ___, ___,
-                                              ___,        TO(BASE),
-                      KC_LGUI,  KC_LALT,  KC_LGUI,        KC_LGUI, KC_LALT, KC_LGUI),
 };
 
 // Whether the macro 1 is currently being recorded.
@@ -307,12 +294,6 @@ uint32_t layer_state_set_user(uint32_t state) {
     led_1_on();
   } else {
     led_1_off();
-  }
-
-  if (LAYER_ON(MAC)) {
-    led_2_on();
-  } else {
-    led_2_off();
   }
 
   if (LAYER_ON(QWERTY)) {
