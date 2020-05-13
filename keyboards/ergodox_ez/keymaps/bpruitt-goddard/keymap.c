@@ -1,5 +1,4 @@
 // An Ergodox EZ keymap mostly following the programmer's dvorak layout.
-// There is a standard QWERTY layer as well
 //
 // See the README.md file for an image of this keymap.
 
@@ -8,7 +7,6 @@
 // The layers that we are defining for this keyboards.
 #define BASE 0
 #define NUM 1
-#define QWERTY 2
 
 typedef struct {
   bool is_press_action;
@@ -73,7 +71,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_QUOTE,         KC_A,       KC_O,       KC_E,           KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,           KC_S,        GUI_T(KC_MINUS),
     TD(TAP_LSHIFT),   KC_AT,      GUI_T(KC_Q),KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      LT(NUM, KC_V),  CTL_T(KC_Z), TD(TAP_RSHIFT),
     ___,              KC_HASH,    KC_GRAVE,   KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME,        KC_END,      MEH_T(KC_NO),
-                                                    ALT_T(KC_APPLICATION), ALL_T(KC_NO),           TO(QWERTY), KC_LGUI,
+                                                    ALT_T(KC_APPLICATION), ALL_T(KC_NO),           ___, KC_LGUI,
                                                                               KC_BSLASH,           ___,
                                                     KC_ENTER, KC_TAB, CTL_T(KC_ESCAPE),           CTL_T(KC_ESCAPE), KC_BSPACE,  KC_SPACE),
 
@@ -88,17 +86,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                KC_LCTL,         ___,
                                       KC_KP_PLUS,  KC_KP_MINUS, KC_DLR,         KC_DELETE, KC_BSPACE,  KC_SPACE),
 
-  // Layer 2: QWERTY control.
-  [QWERTY] = LAYOUT_ergodox_pretty(
-    /* left hand */
-    KC_EQUAL,   KC_1,     KC_2,         KC_3,     KC_4,     KC_5,    KC_LEFT,           KC_RIGHT,     KC_6,   KC_7,   KC_8,     KC_9,         KC_0,         KC_MINUS,
-    KC_DELETE,  KC_Q,     KC_W,         KC_E,     KC_R,     KC_T,    ___,               TO(BASE),     KC_Y,   KC_U,   KC_I,     KC_O,         KC_P,         KC_BSLASH,
-    KC_BSPACE,  KC_A,     KC_S,         KC_D,     KC_F,     KC_G,                                     KC_H,   KC_J,   KC_K,     KC_L,         KC_SCLN,      GUI_T(KC_QUOT),
-    KC_LSFT,    KC_Z,     KC_X,         KC_C,     KC_V,     KC_B, ALT_T(KC_NO),         MEH_T(KC_NO), KC_N,   KC_M,   KC_COMMA, KC_DOT,       KC_SLASH,     KC_RSFT,
-    KC_GRAVE,   KC_QUOTE, LALT(KC_TAB), KC_LEFT,  KC_RIGHT,                                                   KC_UP,  KC_DOWN,  KC_LBRACKET,  KC_RBRACKET,  ___,
-                                                  ___, KC_LGUI,                         TO(BASE), KC_ESCAPE,
-                                                       KC_HOME,                         KC_PGUP,
-                                      KC_ENTER, KC_TAB, KC_END,                         KC_PGDOWN, KC_BSPACE, KC_SPACE),
 };
 
 // Whether the macro 1 is currently being recorded.
@@ -294,12 +281,6 @@ uint32_t layer_state_set_user(uint32_t state) {
     led_1_on();
   } else {
     led_1_off();
-  }
-
-  if (LAYER_ON(QWERTY)) {
-    led_3_on();
-  } else {
-    led_3_off();
   }
 
   return state;
