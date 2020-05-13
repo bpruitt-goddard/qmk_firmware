@@ -5,8 +5,12 @@
 #include QMK_KEYBOARD_H
 
 // The layers that we are defining for this keyboards.
-#define BASE 0
-#define NUM 1
+enum board_layers {
+  _BASE,
+  _RAISE,
+  _LOWER,
+  _ADJUST,
+};
 
 typedef struct {
   bool is_press_action;
@@ -49,8 +53,9 @@ enum custom_keycodes {
 // Some combined keys (one normal keycode when tapped and one modifier or layer
 // toggle when held).
 #define SPC_RALT  MT(MOD_RALT, KC_SPC)  // SPACE key and right alt modifier.
-#define QUOTE_NUM LT(NUM, KC_QUOTE) // Quote key and momentary num layer
-#define SCOMMA_NUM LT(NUM, KC_COMMA) // Comma key and momentary num layer
+#define SCOMMA_RAISE LT(RAISE, KC_COMMA) // Comma key and momentary num layer
+#define LOWER MO(_LOWER)
+#define RAISE MO(_RAISE)
 
 // The most portable copy/paste keys (windows (mostly), linux, and some terminal emulators).
 #define MK_CUT    LSFT(KC_DEL)  // shift + delete
@@ -65,18 +70,18 @@ enum custom_keycodes {
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Layer 0: basic keys.
-  [BASE] = LAYOUT_ergodox_pretty(
-    KC_DLR,           KC_AMPR,    KC_LBRC,    ___,            ___,     ___,     KC_CIRC,           KC_F4,        KC_EQUAL,KC_ASTR, KC_BSLASH, KC_PLUS,        KC_RBRACKET, KC_EXLM,
-    KC_BSLASH,        KC_SCOLON,  SCOMMA_NUM, LCTL_T(KC_DOT), KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,           KC_L,        KC_SLASH,
-    KC_QUOTE,         KC_A,       KC_O,       KC_E,           KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,           KC_S,        GUI_T(KC_MINUS),
-    TD(TAP_LSHIFT),   KC_AT,      GUI_T(KC_Q),KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      LT(NUM, KC_V),  CTL_T(KC_Z), TD(TAP_RSHIFT),
-    ___,              KC_HASH,    KC_GRAVE,   KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME,        KC_END,      MEH_T(KC_NO),
-                                                    ALT_T(KC_APPLICATION), ALL_T(KC_NO),           ___, KC_LGUI,
-                                                                              KC_BSLASH,           ___,
-                                                    KC_ENTER, KC_TAB, CTL_T(KC_ESCAPE),           CTL_T(KC_ESCAPE), KC_BSPACE,  KC_SPACE),
+  [_BASE] = LAYOUT_ergodox_pretty(
+    KC_DLR,           KC_AMPR,    KC_LBRC,      ___,            ___,     ___,     KC_CIRC,           KC_F4,        KC_EQUAL,KC_ASTR, KC_BSLASH, KC_PLUS,        KC_RBRACKET, KC_EXLM,
+    KC_BSLASH,        KC_SCOLON,  SCOMMA_RAISE, LCTL_T(KC_DOT), KC_P,    KC_Y,    KC_PERC,           KC_DELETE,    KC_F,    KC_G,    KC_C,      KC_R,           KC_L,        KC_SLASH,
+    KC_QUOTE,         KC_A,       KC_O,         KC_E,           KC_U,    KC_I,                                     KC_D,    KC_H,    KC_T,      KC_N,           KC_S,        GUI_T(KC_MINUS),
+    TD(TAP_LSHIFT),   KC_AT,      GUI_T(KC_Q),  KC_J,           KC_K,    KC_X,    KC_LALT,           TD(TAP_MACRO),KC_B,    KC_M,    KC_W,      LT(RAISE, KC_V),  CTL_T(KC_Z), TD(TAP_RSHIFT),
+    KC_ESCAPE,        KC_HASH,    KC_GRAVE,     KC_LEFT,        KC_RIGHT,                                                   KC_UP,   KC_DOWN,   KC_HOME,        KC_END,      MEH_T(KC_NO),
+                                                      ALT_T(KC_APPLICATION), ALL_T(KC_NO),           ___, KC_LGUI,
+                                                                                KC_BSLASH,           ___,
+                                                                  KC_ENTER, KC_TAB, LOWER,           RAISE, KC_BSPACE,  KC_SPACE),
 
   // Layer 1: function and numpad keys.
-  [NUM] = LAYOUT_ergodox_pretty(
+  [_RAISE] = LAYOUT_ergodox_pretty(
     ___,  KC_F1,   KC_F2,    KC_F3,       KC_F4,          KC_F5,          ___,         ___, KC_F6,   KC_F7,  KC_F8,     KC_F9,      KC_F10,       KC_F11,
     ___,  ___,     KC_COMMA, KC_DOT,      KC_MS_BTN1,     KC_MS_BTN2,     ___,         ___, KC_UP,   KC_7,   KC_8,      KC_9,       KC_ASTR,      KC_F12,
     ___,  ___,     KC_LCBR,  KC_RCBR,     MC_ARROW,       KC_GRAVE,                         KC_DOWN, KC_4,   KC_5,      KC_6,       KC_PLUS,      KC_UNDS,
@@ -85,6 +90,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                            ___,    ___,         KC_KP_ASTERISK, KC_KP_SLASH,
                                                                KC_LCTL,         ___,
                                       KC_KP_PLUS,  KC_KP_MINUS, KC_DLR,         KC_DELETE, KC_BSPACE,  KC_SPACE),
+
+  [_LOWER] = LAYOUT_ergodox_pretty(
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,                    ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,                                ___,  ___,  ___,  ___,   ___,
+                                ___,    ___,         ___,  ___,
+                                        ___,         ___,
+                            ___,  ___,  ___,         ___,  ___,  ___),
+
+  [_ADJUST] = LAYOUT_ergodox_pretty(
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,                    ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,  ___,  ___,         ___, ___,  ___,  ___,  ___,  ___,  ___,
+    ___,  ___,  ___,  ___,  ___,                                ___,  ___,  ___,  ___,   ___,
+                                ___,    ___,         ___,  ___,
+                                        ___,         ___,
+                            ___,  ___,  ___,         ___,  ___,  ___),
+
 
 };
 
@@ -267,21 +293,38 @@ void led_3_off(void) {
   ergodox_right_led_3_off();
 }
 
-uint32_t layer_state_set_user(uint32_t state) {
+void layer_state_set_rgb(uint32_t state) {
   current_layer_state = state;
 
   if (is_macro1_recording) {
     led_1_on();
     led_2_on();
     led_3_on();
-    return state;
+    return;
   }
 
-  if (LAYER_ON(NUM)) {
+  if (LAYER_ON(_LOWER)) {
     led_1_on();
   } else {
     led_1_off();
   }
 
-  return state;
+  if (LAYER_ON(_RAISE)) {
+    led_2_on();
+  } else {
+    led_2_off();
+  }
+
+  if (LAYER_ON(_ADJUST)) {
+    led_3_on();
+  } else {
+    led_3_off();
+  }
 };
+
+// Changes to adjust layer when raise and lower are held
+layer_state_t layer_state_set_user(layer_state_t state) {
+  state = update_tri_layer_state(state, _LOWER, _RAISE, _ADJUST);
+  layer_state_set_rgb(state);
+  return state;
+}
